@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "nodemon src/service.js",
+    "start": "node src/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -20,7 +21,10 @@
   },
   "homepage": "https://github.com/laven97/nodejs-hw#readme",
   "devDependencies": {
-    "nodemon": "^3.1.14"
+    "nodemon": "^3.1.14",
+    "@eslint/js": "^9.39.4",
+    "eslint": "^10.0.3",
+    "globals": "^17.4.0"
   },
   "dependencies": {
     "cors": "2.8.6",
