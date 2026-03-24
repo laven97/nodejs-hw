@@ -15,7 +15,11 @@ const logger = pinoHttp({
 
 app.use(cors());
 app.use(express.json());
-app.use(pinoHttp())
+app.use(logger)
+
+app.get("/test-error", () => {
+  throw new Error("Simulated server error");
+});
 
 app.get("/notes", (req, res) => {
   res.status(200).json({ message: "Retrieved all notes" });
@@ -25,10 +29,6 @@ app.get("/notes/:noteId", (req, res) => {
     const {noteId} = req.params
 
   res.status(200).json({ message: `Retrieved note with ID: ${noteId}` });
-});
-
-app.get("/test-error", () => {
-  throw new Error("Simulated server error");
 });
 
 app.use((req, res) => {
