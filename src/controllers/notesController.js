@@ -1,32 +1,32 @@
 import createHttpError from 'http-errors';
-import { NoteSchema } from '../models/note.js';
+import { Note } from '../models/note.js';
 
 export const getAllNotes = async (req, res) => {
-  const notes = await NoteSchema.find();
+  const notes = await Note.find();
 
   res.status(200).json(notes);
 };
 
 export const getNoteById = async (req, res) => {
   const { noteId } = req.params;
-  const noteById = await NoteSchema.findById(noteId);
+  const note = await Note.findById(note);
 
-  if (!noteById) {
+  if (!note) {
     throw createHttpError(404, 'Note not found');
   }
 
-  res.status(200).json(noteById);
+  res.status(200).json(note);
 };
 
 export const createNote = async (req, res) => {
-  const newNote = await NoteSchema.create(req.body);
+  const newNote = await Note.create(req.body);
 
-  res.status(200).json(newNote);
+  res.status(201).json(newNote);
 };
 
 export const deleteNote = async (req, res) => {
   const { noteId } = req.params;
-  const deleteNote = await NoteSchema.deleteOne(noteId);
+  const deleteNote = await Note.findByIdAndDelete(noteId);
 
   if (!deleteNote) {
     throw createHttpError(404, 'Note not found');
@@ -37,7 +37,7 @@ export const deleteNote = async (req, res) => {
 
 export const updateNote = async (req, res) => {
   const { noteId } = req.params;
-  const updateNote = await NoteSchema.updateOne(noteId, req.body, {
+  const updateNote = await Note.findByIdAndUpdate(noteId, req.body, {
     returnDocument: 'after',
   });
 
