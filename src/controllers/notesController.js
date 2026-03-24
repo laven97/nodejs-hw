@@ -9,7 +9,7 @@ export const getAllNotes = async (req, res) => {
 
 export const getNoteById = async (req, res) => {
   const { noteId } = req.params;
-  const note = await Note.findById(note);
+  const note = await Note.findById(noteId);
 
   if (!note) {
     throw createHttpError(404, 'Note not found');
@@ -26,24 +26,24 @@ export const createNote = async (req, res) => {
 
 export const deleteNote = async (req, res) => {
   const { noteId } = req.params;
-  const deleteNote = await Note.findByIdAndDelete(noteId);
+  const deleteNoteById = await Note.findByIdAndDelete(noteId);
 
-  if (!deleteNote) {
+  if (!deleteNoteById) {
     throw createHttpError(404, 'Note not found');
   }
 
-  res.status(200).json(deleteNote);
+  res.status(200).json(deleteNoteById);
 };
 
 export const updateNote = async (req, res) => {
   const { noteId } = req.params;
-  const updateNote = await Note.findByIdAndUpdate(noteId, req.body, {
+  const updateNoteById = await Note.findByIdAndUpdate(noteId, req.body, {
     returnDocument: 'after',
   });
 
-  if (!updateNote) {
+  if (!updateNoteById) {
     throw createHttpError(404, 'Note not found');
   }
 
-  res.status(200).json(updateNote);
+  res.status(200).json(updateNoteById);
 };
