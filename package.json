@@ -1,0 +1,39 @@
+{
+  "name": "nodejs-hw",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon src/server.js",
+    "start": "node src/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/laven97/nodejs-hw.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/laven97/nodejs-hw/issues"
+  },
+  "homepage": "https://github.com/laven97/nodejs-hw#readme",
+  "devDependencies": {
+    "@eslint/js": "^9.39.4",
+    "eslint": "^10.0.3",
+    "globals": "^17.4.0",
+    "nodemon": "^3.1.14"
+  },
+  "dependencies": {
+    "cors": "2.8.6",
+    "dotenv": "17.3.1",
+    "express": "^5.2.1",
+    "helmet": "8.1.0",
+    "http-errors": "^2.0.1",
+    "mongoose": "^9.3.2",
+    "pino-http": "^11.0.0",
+    "pino-pretty": "^13.1.3"
+  }
+}
