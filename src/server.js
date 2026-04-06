@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import {errors} from "celebrate";
 import "dotenv/config";
+import cookieParser from "cookie-parser"
 
 import {connectMongoDB} from "./db/connectMongoDB.js"
 import { logger } from "./middleware/logger.js";
@@ -12,9 +13,11 @@ import { errorHandler } from "./middleware/errorHandler.js";
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+app.use(cors());
 app.use(logger)
 app.use(express.json());
-app.use(cors());
+app.use(cookieParser())
+
 
 app.use(notesRoutes)
 
