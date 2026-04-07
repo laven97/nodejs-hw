@@ -6,10 +6,10 @@ import { FIFTEEN_MINUTES, ONE_DAY } from '../constants/time.js';
 export const createSession = async (userId) => {
   return Session.create({
     userId,
-    accessToken: crypto.randomBytes(),
-    refreshToken: crypto.randomBytes(),
-    accessTokenValidUntil: new Data(Data.now()) + FIFTEEN_MINUTES,
-    refreshTokenValidUntil: new Data(Data.now()) + ONE_DAY,
+    accessToken: crypto.randomBytes(30).toString("base64"),
+    refreshToken: crypto.randomBytes(30).toString("base64"),
+    accessTokenValidUntil: new Date(Date.now()) + FIFTEEN_MINUTES,
+    refreshTokenValidUntil: new Date(Date.now()) + ONE_DAY,
   });
 };
 
@@ -26,7 +26,7 @@ export const setSessionCookies = (res, session) => {
     sameSite: 'none',
     maxAge: ONE_DAY,
   });
-  res.cookie('sessionId', session._id, {
+  res.cookie('sessionId', String(session._id), {
     httpOnly: true,
     secure: true,
     sameSite: 'none',
