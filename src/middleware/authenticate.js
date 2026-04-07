@@ -1,5 +1,5 @@
-import { Session } from '../models/session';
-import { User } from '../models/user';
+import { Session } from '../models/session.js';
+import { User } from '../models/user.js';
 
 export const authenticate = async (req, res, next) => {
   const { accessToken } = req.body;
