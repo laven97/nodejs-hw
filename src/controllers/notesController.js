@@ -42,7 +42,7 @@ export const getNoteById = async (req, res) => {
 export const createNote = async (req, res) => {
   const newNote = await Note.create({
     ...req.body,
-    noteId: req.user._id,
+    userId: req.user._id,
   });
 
   res.status(201).json(newNote);
@@ -50,7 +50,7 @@ export const createNote = async (req, res) => {
 
 export const deleteNote = async (req, res) => {
   const { noteId } = req.params;
-  const deleteNoteById = await Note.findByIdAndDelete({
+  const deleteNoteById = await Note.findOneAndDelete({
     _id: noteId,
     userId: req.user._id,
   });

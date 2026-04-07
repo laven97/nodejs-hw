@@ -4,9 +4,9 @@ import { TAGS } from '../constants/tags.js';
 
 const noteSchema = new Schema(
   {
-    noteId: {
+    userId: {
       type: Schema.Types.ObjectId,
-      ref: 'Note',
+      ref: 'User',
       required: true,
     },
     title: {

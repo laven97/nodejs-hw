@@ -1,9 +1,8 @@
 import bcrypt from 'bcrypt';
 import createHttpError from 'http-errors';
 
-
 import { User } from '../models/user.js';
-import { createSessionUserId, setSessionCookies } from '../services/auth.js';
+import { createSession, setSessionCookies } from '../services/auth.js';
 import { Session } from '../models/session.js';
 
 export const registerUser = async (req, res) => {
@@ -21,7 +20,7 @@ export const registerUser = async (req, res) => {
     password: hashedPassword,
   });
 
-  const newSession = await createSessionUserId(user._id);
+  const newSession = await createSession(user._id);
   setSessionCookies(res, newSession);
 
   res.status(201).json(user);
@@ -38,10 +37,12 @@ export const loginUser = async (req, res) => {
 
   const isPasswordValid = await bcrypt.compare(password, user.password);
   if (!isPasswordValid) {
-    throw createGttpError(401, 'Invalid credentials');
+    throw createHttpError(401, 'Invalid credentials');
   }
 
-  const newSession = await createSessionUserId(user._id);
+  await Session.deleteOne({ userId: user._id });
+
+  const newSession = await createSession(user._id);
   setSessionCookies(res, newSession);
 
   res.status(200).json(user);
@@ -62,7 +63,7 @@ export const logoutUser = async (req, res) => {
 };
 
 export const refreshUserSession = async (req, res) => {
-  const { refreshToken, sessionId } = req.body;
+  const { refreshToken, sessionId } = req.cookies;
 
   const session = await Session.findOne({
     _id: sessionId,
@@ -72,12 +73,12 @@ export const refreshUserSession = async (req, res) => {
     throw createHttpError(401, 'Session not found');
   }
 
-  const isTokenExpired = new Data() > new Data(session.refreshTokenValidUntil);
+  const isTokenExpired = new Date() > new Date(session.refreshTokenValidUntil);
   if (isTokenExpired) {
     throw createHttpError(401, 'Session token expired');
   }
 
-  await session.deleteOne({
+  await Session.deleteOne({
     _id: sessionId,
     refreshToken,
   });
