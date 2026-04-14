@@ -3,10 +3,12 @@ import createHttpError from 'http-errors';
 import jwt from 'jsonwebtoken';
 import fs from 'node:fs/promises';
 import path from 'path';
+import handlebars from 'handlebars';
 
 import { User } from '../models/user.js';
 import { createSession, setSessionCookies } from '../services/auth.js';
 import { Session } from '../models/session.js';
+import { sendEmail } from '../utils/sendMail.js';
 
 export const registerUser = async (req, res) => {
   const { email, password } = req.body;
@@ -97,14 +99,18 @@ export const requestResetEmail = async (req, res) => {
 
   const user = await User.findOne({ email });
   if (!user) {
-    throw createHttpError(200, {
+    return res.status(200, {
       message: 'Password reset email sent successfully',
     });
   }
 
-  const resetToken = jwt.sign({ sub: user_id, email }, process.env.JWT_SECRET, {
-    expiresIn: '15m',
-  });
+  const resetToken = jwt.sign(
+    { sub: user._id, email },
+    process.env.JWT_SECRET,
+    {
+      expiresIn: '15m',
+    },
+  );
 
   const frontendURL = `${process.env.FRONTEND_DOMAIN}/reset-password?token=${resetToken}`;
 
@@ -112,11 +118,11 @@ export const requestResetEmail = async (req, res) => {
     process.cwd(),
     'src',
     'templates',
-    'resetPasswordEmail.html',
+    'reset-password-email.html',
   );
 
-  const templateSource = await fs.reafFile(temlatesPath, 'utf-8');
-  const template = Handlebars.compile(templateSource);
+  const templateSource = await fs.readFile(temlatesPath, 'utf-8');
+  const template = handlebars.compile(templateSource);
 
   const html = template({
     name: user.username || user.email,
@@ -150,7 +156,7 @@ export const resetPassword = async (req, res) => {
     throw createHttpError(401, 'Invalid or expired token');
   }
 
-  const user = await User.findById({ _id: payload.sub, email: payload.email });
+  const user = await User.findOne({ _id: payload.sub, email: payload.email });
   if (!user) {
     throw createHttpError(404, 'User not found');
   }

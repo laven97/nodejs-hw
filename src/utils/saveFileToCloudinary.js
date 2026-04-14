@@ -7,13 +7,13 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-export const saveToFileCloudinary = async (buffer, userId) => {
+export const saveFileToCloudinary = async (buffer) => {
   return new Promise((resolve, reject) => {
     const uploadStream = cloudinary.uploader.upload_stream(
       {
         folder: 'notes-api/images',
         resource_type: 'image',
-        public_id: `image_${userId}`,
+        public_id: `image`,
         overwrite: true,
         unique_filename: false,
         transformation: [
