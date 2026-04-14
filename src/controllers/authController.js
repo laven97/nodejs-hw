@@ -84,7 +84,7 @@ export const refreshUserSession = async (req, res) => {
   }
 
   await Session.deleteOne({
-    _id: sessionId,
+    _id: session._id,
     refreshToken,
   });
 
